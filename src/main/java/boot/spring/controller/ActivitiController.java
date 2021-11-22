@@ -188,7 +188,8 @@ public class ActivitiController {
 	@ResponseBody
 	public MSG start_leave(LeaveApply apply, HttpSession session) {
 		String userid = (String) session.getAttribute("username");
-		Map<String, Object> variables = new HashMap<String, Object>();
+		//
+		Map<String, Object> variables = new HashMap<>();
 		variables.put("applyuserid", userid);
 		variables.put("deptleader", apply.getDeptleader());
 		leaveservice.startWorkflow(apply, userid, variables);
@@ -458,9 +459,13 @@ public class ActivitiController {
 	@RequestMapping(value = "traceprocess/{executionid}", method = RequestMethod.GET)
 	public void traceprocess(@PathVariable("executionid") String executionid, HttpServletResponse response)
 			throws Exception {
+		//
 		ProcessInstance process = runservice.createProcessInstanceQuery().processInstanceId(executionid).singleResult();
+		//
 		BpmnModel bpmnmodel = rep.getBpmnModel(process.getProcessDefinitionId());
+		//
 		List<String> activeActivityIds = runservice.getActiveActivityIds(executionid);
+		//
 		DefaultProcessDiagramGenerator gen = new DefaultProcessDiagramGenerator();
 		// 获得历史活动记录实体（通过启动时间正序排序，不然有的线可以绘制不出来）
 		List<HistoricActivityInstance> historicActivityInstances = histiryservice.createHistoricActivityInstanceQuery()

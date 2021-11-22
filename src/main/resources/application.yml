@@ -8,10 +8,10 @@ mybatis:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3305/activiti
+    url: jdbc:mysql://192.168.2.209:3306/activiti
     driver-class-name: com.mysql.jdbc.Driver
-    username: root
-    password: 1234
+    username: opsa
+    password: pass123456
   activiti:
     database-schema-update: true
     check-process-definitions: true
