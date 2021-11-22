@@ -72,7 +72,7 @@ public class Login {
         for (UserRoleRel ur : roles) {
             int rid = ur.getRole().getRid();
             Role role = systemservice.getRolebyid(rid);
-            List<RolePermission> rps = role.getRole_permission();
+            List<RolePermission> rps = role.getRolePermissions();
             for (RolePermission rp : rps) {
                 list.add(rp.getPermission().getPermissionName());
             }

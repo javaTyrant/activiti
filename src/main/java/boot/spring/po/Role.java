@@ -21,5 +21,5 @@ public class Role {
     /**
      *
      */
-    List<RolePermission> role_permissions;
+    List<RolePermission> rolePermissions;
 }
