@@ -17,9 +17,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
-import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +28,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-
 import boot.spring.pagemodel.DataGrid;
 import boot.spring.pagemodel.HistoryProcess;
 import boot.spring.pagemodel.MSG;
 import boot.spring.pagemodel.PurchaseTask;
-import boot.spring.po.LeaveApply;
 import boot.spring.po.PurchaseApply;
-import boot.spring.po.Role;
-import boot.spring.po.User;
-import boot.spring.po.User_role;
 import boot.spring.service.PurchaseService;
 import boot.spring.service.SystemService;
 import io.swagger.annotations.Api;

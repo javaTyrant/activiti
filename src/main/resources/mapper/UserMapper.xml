@@ -10,7 +10,7 @@
         <result column="password" property="password"/>
         <result column="tel" property="tel" />
         <result column="age" property="age" />
-        <collection property="user_roles" column="userid" ofType="boot.spring.po.User_role">  
+        <collection property="user_roles" column="userid" ofType="boot.spring.po.UserRoleRel">
             <id property="urid" column="urid" />
             <association column="roleid" property="role" javaType="boot.spring.po.Role">
 	        	<id column="rid" property="rid"></id>

@@ -3,6 +3,7 @@ package boot.spring.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import boot.spring.pagemodel.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import boot.spring.pagemodel.DataGrid;
-import boot.spring.pagemodel.Userinfo;
 import boot.spring.po.Permission;
 import boot.spring.po.Role;
 import boot.spring.po.User;
@@ -46,12 +46,12 @@ public class SystemController {
 	@ApiOperation("获取用户列表")
 	@RequestMapping(value="/userlist",method=RequestMethod.GET)
 	@ResponseBody
-	DataGrid<Userinfo> userlist(@RequestParam("current") int current,@RequestParam("rowCount") int rowCount){
+	DataGrid<UserInfo> userlist(@RequestParam("current") int current, @RequestParam("rowCount") int rowCount){
 		int total=systemservice.getallusers().size();
 		List<User> userlist=systemservice.getpageusers(current,rowCount);
-		List<Userinfo> users=new ArrayList<Userinfo>();
+		List<UserInfo> users=new ArrayList<UserInfo>();
 		for(User user:userlist){
-			Userinfo u=new Userinfo();
+			UserInfo u=new UserInfo();
 			int userid = user.getUid();
 			u.setId(userid);
 			u.setAge(user.getAge());
@@ -68,11 +68,11 @@ public class SystemController {
 				}
 				if(rolename.length()>0)
 					rolename=rolename.substring(1,rolename.length());
-				u.setRolelist(rolename);
+				u.setRoleList(rolename);
 			}
 			users.add(u);
 		}
-		DataGrid<Userinfo> grid=new DataGrid<Userinfo>();
+		DataGrid<UserInfo> grid=new DataGrid<UserInfo>();
 		grid.setCurrent(current);
 		grid.setRows(users);
 		grid.setRowCount(rowCount);

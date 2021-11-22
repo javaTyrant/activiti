@@ -25,21 +25,19 @@ import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSON;
 import boot.spring.pagemodel.Process;
 import boot.spring.mapper.LeaveApplyMapper;
 import boot.spring.pagemodel.DataGrid;
@@ -47,18 +45,13 @@ import boot.spring.pagemodel.HistoryProcess;
 import boot.spring.pagemodel.LeaveTask;
 import boot.spring.pagemodel.MSG;
 import boot.spring.po.LeaveApply;
-import boot.spring.po.Permission;
-import boot.spring.po.Role;
-import boot.spring.po.Role_permission;
-import boot.spring.po.User;
-import boot.spring.po.User_role;
 import boot.spring.service.LeaveService;
 import boot.spring.service.SystemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "请假流程接口")
-@Controller
+@RestController
 public class ActivitiController {
 	@Autowired
 	RepositoryService rep;
@@ -108,7 +101,6 @@ public class ActivitiController {
 	
 	@ApiOperation("查询已部署工作流列表")
 	@RequestMapping(value = "/getprocesslists", method = RequestMethod.POST)
-	@ResponseBody
 	public DataGrid<Process> getlist(@RequestParam("current") int current, @RequestParam("rowCount") int rowCount) {
 		int firstrow = (current - 1) * rowCount;
 		List<ProcessDefinition> list = rep.createProcessDefinitionQuery().listPage(firstrow, rowCount);
@@ -185,7 +177,6 @@ public class ActivitiController {
 	
 	@ApiOperation("发起一个请假流程")
 	@RequestMapping(value = "/startleave", method = RequestMethod.POST)
-	@ResponseBody
 	public MSG start_leave(LeaveApply apply, HttpSession session) {
 		String userid = (String) session.getAttribute("username");
 		//
@@ -198,7 +189,6 @@ public class ActivitiController {
 
 	@ApiOperation("获取部门领导审批待办列表")
 	@RequestMapping(value = "/depttasklist", method = RequestMethod.POST)
-	@ResponseBody
 	public DataGrid<LeaveTask> getdepttasklist(HttpSession session, @RequestParam("current") int current,
 			@RequestParam("rowCount") int rowCount) {
 		String username = (String) session.getAttribute("username");
@@ -268,7 +258,6 @@ public class ActivitiController {
 
 	@ApiOperation("获取销假任务列表")
 	@RequestMapping(value = "/xjtasklist", method = RequestMethod.POST)
-	@ResponseBody
 	public DataGrid<LeaveTask> getXJtasklist(HttpSession session, @RequestParam("current") int current,
 			@RequestParam("rowCount") int rowCount) {
 		int firstrow = (current - 1) * rowCount;
@@ -302,7 +291,6 @@ public class ActivitiController {
 	
 	@ApiOperation("获取调整休假申请任务列表")
 	@RequestMapping(value = "/updatetasklist", method = RequestMethod.POST)
-	@ResponseBody
 	public DataGrid<LeaveTask> getupdatetasklist(HttpSession session, @RequestParam("current") int current,
 			@RequestParam("rowCount") int rowCount) {
 		int firstrow = (current - 1) * rowCount;
@@ -336,7 +324,6 @@ public class ActivitiController {
 
 	@ApiOperation("使用任务id获取请假业务数据")
 	@RequestMapping(value = "/dealtask", method = RequestMethod.POST)
-	@ResponseBody
 	public LeaveApply taskdeal(@RequestParam("taskid") String taskid, HttpServletResponse response) {
 		Task task = taskservice.createTaskQuery().taskId(taskid).singleResult();
 		ProcessInstance process = runservice.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId())
@@ -352,7 +339,6 @@ public class ActivitiController {
 
 	@ApiOperation("完成部门领导审批待办")
 	@RequestMapping(value = "/task/deptcomplete/{taskid}", method = RequestMethod.POST)
-	@ResponseBody
 	public MSG deptcomplete(HttpSession session, @PathVariable("taskid") String taskid, HttpServletRequest req) {
 		String username = (String) session.getAttribute("username");
 		Map<String, Object> variables = new HashMap<String, Object>();
@@ -367,7 +353,6 @@ public class ActivitiController {
 	
 	@ApiOperation("完成hr审批待办")
 	@RequestMapping(value = "/task/hrcomplete/{taskid}", method = RequestMethod.POST)
-	@ResponseBody
 	public MSG hrcomplete(HttpSession session, @PathVariable("taskid") String taskid, HttpServletRequest req) {
 		String userid = (String) session.getAttribute("username");
 		Map<String, Object> variables = new HashMap<String, Object>();
@@ -380,7 +365,6 @@ public class ActivitiController {
 	
 	@ApiOperation("完成销假待办")
 	@RequestMapping(value = "/task/reportcomplete/{taskid}", method = RequestMethod.POST)
-	@ResponseBody
 	public MSG reportbackcomplete(@PathVariable("taskid") String taskid, HttpServletRequest req) {
 		String realstart_time = req.getParameter("realstart_time");
 		String realend_time = req.getParameter("realend_time");
@@ -390,7 +374,6 @@ public class ActivitiController {
 
 	@ApiOperation("完成调整申请待办")
 	@RequestMapping(value = "/task/updatecomplete/{taskid}", method = RequestMethod.POST)
-	@ResponseBody
 	public MSG updatecomplete(@PathVariable("taskid") String taskid, @ModelAttribute("leave") LeaveApply leave,
 			@RequestParam("reapply") String reapply) {
 		leaveservice.updatecomplete(taskid, leave, reapply);
@@ -398,7 +381,6 @@ public class ActivitiController {
 	}
 
 	@RequestMapping(value = "/getfinishprocess", method = RequestMethod.POST)
-	@ResponseBody
 	public DataGrid<HistoryProcess> getHistory(HttpSession session, @RequestParam("current") int current,
 			@RequestParam("rowCount") int rowCount) {
 		String userid = (String) session.getAttribute("username");
@@ -432,7 +414,6 @@ public class ActivitiController {
 	
 	@ApiOperation("使用流程实例编号获取历史流程数据")
 	@RequestMapping(value = "/processinfo", method = RequestMethod.POST)
-	@ResponseBody
 	public List<HistoricActivityInstance> processinfo(@RequestParam("instanceid") String instanceid) {
 		List<HistoricActivityInstance> his = histiryservice.createHistoricActivityInstanceQuery()
 				.processInstanceId(instanceid).orderByHistoricActivityInstanceStartTime().asc().list();
@@ -441,7 +422,6 @@ public class ActivitiController {
 	
 	@ApiOperation("使用业务号获取历史流程数据")
 	@RequestMapping(value = "/processhis", method = RequestMethod.POST)
-	@ResponseBody
 	public List<HistoricActivityInstance> processhis(@RequestParam("ywh") String ywh) {
 		String instanceid = histiryservice.createHistoricProcessInstanceQuery().processDefinitionKey("purchase")
 				.processInstanceBusinessKey(ywh).singleResult().getId();

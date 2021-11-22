@@ -16,10 +16,10 @@ import boot.spring.mapper.UserMapper;
 import boot.spring.mapper.UserRoleMapper;
 import boot.spring.po.Permission;
 import boot.spring.po.Role;
-import boot.spring.po.Role_permission;
+import boot.spring.po.RolePermission;
 import boot.spring.po.User;
 import boot.spring.po.UserRole;
-import boot.spring.po.User_role;
+import boot.spring.po.UserRoleRel;
 import boot.spring.service.SystemService;
 
 
@@ -66,7 +66,7 @@ public class SystemServiceImpl implements SystemService {
 		usermapper.adduser(user);
 		for (String rolename : rolenames) {
 			Role role = rolemapper.getRoleidbyName(rolename);
-			User_role ur = new User_role();
+			UserRoleRel ur = new UserRoleRel();
 			ur.setRole(role);
 			ur.setUser(user);
 			rolemapper.adduserrole(ur);
@@ -88,7 +88,7 @@ public class SystemServiceImpl implements SystemService {
 			usermapper.deleteuserrole(uid);
 			for (String rolename : rolenames) {
 				Role role = rolemapper.getRoleidbyName(rolename);
-				User_role ur = new User_role();
+				UserRoleRel ur = new UserRoleRel();
 				ur.setRole(role);
 				ur.setUser(user);
 				rolemapper.adduserrole(ur);
@@ -109,7 +109,7 @@ public class SystemServiceImpl implements SystemService {
 		rolemapper.addRole(role);
 		for (String permissionname : permissionnames) {
 			Permission p = permissionmapper.getPermissionByname(permissionname);
-			Role_permission rp = new Role_permission();
+			RolePermission rp = new RolePermission();
 			rp.setRole(role);
 			rp.setPermission(p);
 			rolemapper.addRolePermission(rp);
@@ -134,7 +134,7 @@ public class SystemServiceImpl implements SystemService {
 		Role role = rolemapper.getRolebyid(rid);
 		for (String permissionname : permissionnames) {
 			Permission p = permissionmapper.getPermissionByname(permissionname);
-			Role_permission rp = new Role_permission();
+			RolePermission rp = new RolePermission();
 			rp.setRole(role);
 			rp.setPermission(p);
 			rolemapper.addRolePermission(rp);
